@@ -19,15 +19,15 @@ outlet = lsl_outlet(info);
 x = ones(h, 1) * (1:w);
 y = (1:h)' * ones(1, h);
 circle = (x - w * 0.5) .* (x - w * 0.5) + (y - h * 0.5) .* (y - h * 0.5);
-circle = circle > 40 * 40;
+circle = circle < 40 * 40;
 
 square = (x > 40) & (x < 120) & (y > 40) & (y < 120);
-square = ~square;
+%square = ~square;
 
 clear shapes
-shapes(:, :, 1) = circle + 0.5;
-shapes(:, :, 2) = square + 0.5;
-shapes(:, :, 3) = ones(h, w);
+shapes(:, :, 1) = circle;
+shapes(:, :, 2) = square;
+shapes(:, :, 3) = zeros(h, w);
 tags = cellstr(['circle'; 'square']);
 %tags = [0, 1];
 
