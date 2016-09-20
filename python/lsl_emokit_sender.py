@@ -30,10 +30,10 @@ if __name__ == "__main__":
             .append_child_value("type", "EEG")
     for c in channel_names:
         channels.append_child("channel") \
-            .append_child_value("label", c) \
+            .append_child_value("label", "Quality" + c) \
             .append_child_value("unit", "unitless") \
             .append_child_value("type", "Quality")
-    for c in ['gyro_x', 'gyro_y']:
+    for c in ['gyrox', 'gyroy']:
         channels.append_child("channel") \
             .append_child_value("label", c) \
             .append_child_value("unit", "unitless") \
