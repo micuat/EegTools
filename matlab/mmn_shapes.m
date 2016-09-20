@@ -28,7 +28,7 @@ clear shapes
 shapes(:, :, 1) = circle;
 shapes(:, :, 2) = square;
 shapes(:, :, 3) = zeros(h, w);
-tags = cellstr(['circle'; 'square']);
+tags = cellstr(['deviant'; 'standard']);
 %tags = [0, 1];
 
 figure(1)
