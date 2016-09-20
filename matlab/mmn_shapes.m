@@ -1,7 +1,14 @@
-% parameters
-h = 160;
-w = 160;
+% screen resolution
+H = 768;
+W = 1366;
+
+% manually find some parameters to fit to screen
+h = int32(H * 0.75);
+w = int32(W * 0.8);
 interval = 1; %sec
+circle_diameter = h * 0.5 * 0.75;
+square_halfedge = h * 0.5 * 0.75;
+square_edge = square_halfedge * 2;
 
 % LSL
 % instantiate the library
@@ -16,20 +23,19 @@ disp('Opening an outlet...');
 outlet = lsl_outlet(info);
 
 % prepare shapes
-x = ones(h, 1) * (1:w);
-y = (1:h)' * ones(1, h);
+[x y] = meshgrid(1:w, 1:h);
 circle = (x - w * 0.5) .* (x - w * 0.5) + (y - h * 0.5) .* (y - h * 0.5);
-circle = circle < 40 * 40;
+circle = circle < circle_diameter * circle_diameter;
 
-square = (x > 40) & (x < 120) & (y > 40) & (y < 120);
-%square = ~square;
+squarex = abs(x - w * 0.5) < square_halfedge;
+squarey = abs(y - h * 0.5) < square_halfedge;
+square = squarex & squarey;
 
 clear shapes
 shapes(:, :, 1) = circle;
 shapes(:, :, 2) = square;
 shapes(:, :, 3) = zeros(h, w);
-tags = cellstr(['deviant'; 'standard']);
-%tags = [0, 1];
+tags = {'deviant'; 'standard'};
 
 figure(1)
 
