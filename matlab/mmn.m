@@ -42,37 +42,40 @@ classdef mmn
         % start experiment
         function start(obj)
             figure(1)
+            presentPreExperiment(obj);
             while waitforbuttonpress ~= 1
             end
             
             for i = 1:obj.numStimuli
                 disp(i);
                 index = (rand < 0.8);
-                if index == 0
+                if index == 1
                     obj.outlet.push_sample({'Standard'});
                     presentStandard(obj);
                 else
                     obj.outlet.push_sample({'Deviant'});
                     presentDeviant(obj);
                 end
+                pause(obj.tDur);
                 
                 presentBreak(obj);
+                pause(obj.tISI);
             end
+        end
+        
+        function presentPreExperiment(obj)
+            disp('please press a key');
         end
         
         function presentStandard(obj)
             disp('presenting standard stimulus');
-            pause(obj.tDur);
         end
         
         function presentDeviant(obj)
             disp('presenting deviant stimulus');
-            pause(obj.tDur);
         end
         
         function presentBreak(obj)
-            disp('a short break');
-            pause(obj.tISI);
         end
     end
 end

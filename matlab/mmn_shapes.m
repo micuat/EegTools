@@ -1,54 +1,59 @@
-% screen resolution
-H = 768;
-W = 1366;
+classdef mmn_shapes < mmn
+    properties
+        % screen resolution
+        H = 768;
+        W = 1366;
+        
+        h
+        w
+        circle_diameter
+        square_halfedge
+        square_edge
+        
+        square
+        circle
+        blank
+    end
+    methods
+        function obj = mmn_shapes(tSOA, tDur, numStimuli, pDeviant)
+            % super constructor
+            obj@mmn(tSOA, tDur, numStimuli, pDeviant);
+            
+            % manually find some parameters to fit to screen
+            obj.h = int32(obj.H * 0.7);
+            obj.w = int32(obj.W * 0.7);
 
-% manually find some parameters to fit to screen
-h = int32(H * 0.7);
-w = int32(W * 0.7);
-interval = 1; %sec
-circle_diameter = h * 0.5 * 0.75;
-square_halfedge = h * 0.5 * 0.75;
-square_edge = square_halfedge * 2;
+            obj.circle_diameter = obj.h * 0.5 * 0.75;
+            obj.square_halfedge = obj.h * 0.5 * 0.75;
+            obj.square_edge = obj.square_halfedge * 2;
+            
+            % prepare shapes
+            [x y] = meshgrid(1:obj.w, 1:obj.h);
+            obj.circle = (x - obj.w * 0.5) .* (x - obj.w * 0.5) + (y - obj.h * 0.5) .* (y - obj.h * 0.5);
+            obj.circle = obj.circle < obj.circle_diameter * obj.circle_diameter;
 
-% LSL
-% instantiate the library
-disp('Loading library...');
-lib = lsl_loadlib();
-
-% make a new stream outlet
-disp('Creating a new streaminfo...');
-info = lsl_streaminfo(lib,'MatlabStimuli','Markers',1,1/interval,'cf_string','stimuliID');
-
-disp('Opening an outlet...');
-outlet = lsl_outlet(info);
-
-% prepare shapes
-[x y] = meshgrid(1:w, 1:h);
-circle = (x - w * 0.5) .* (x - w * 0.5) + (y - h * 0.5) .* (y - h * 0.5);
-circle = circle < circle_diameter * circle_diameter;
-
-squarex = abs(x - w * 0.5) < square_halfedge;
-squarey = abs(y - h * 0.5) < square_halfedge;
-square = squarex & squarey;
-
-clear shapes
-shapes(:, :, 1) = circle;
-shapes(:, :, 2) = square;
-shapes(:, :, 3) = zeros(h, w);
-tags = {'deviant'; 'standard'};
-
-figure(1)
-imshow(shapes(:, :, end));
-
-while waitforbuttonpress ~= 1
-end
-
-for i = 1:100
-    disp(i);
-    index = (rand > 0.2) + 1;
-    outlet.push_sample(tags(index));
-    imshow(shapes(:, :, index));
-    pause(0.1 * interval);
-    imshow(shapes(:, :, end));
-    pause(0.9 * interval);
+            squarex = abs(x - obj.w * 0.5) < obj.square_halfedge;
+            squarey = abs(y - obj.h * 0.5) < obj.square_halfedge;
+            obj.square = squarex & squarey;
+            
+            obj.blank = zeros(obj.h, obj.w);
+        end
+        
+        function presentPreExperiment(obj)
+            imshow(obj.blank);
+            disp('please press a key');
+        end
+        
+        function presentStandard(obj)
+            imshow(obj.square);
+        end
+        
+        function presentDeviant(obj)
+            imshow(obj.circle);
+        end
+        
+        function presentBreak(obj)
+            imshow(obj.blank);
+        end
+    end
 end
