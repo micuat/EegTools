@@ -18,7 +18,7 @@ classdef mmn
             obj.pDeviant = pDeviant;
             
             assert(tSOA > tDur);
-            assert(pDeviant > 0 && pDeviant < 1);
+            assert(pDeviant > 0 && pDeviant < 0.5);
             
             % LSL Init Begin
             % instantiate the library
@@ -46,21 +46,31 @@ classdef mmn
             while waitforbuttonpress ~= 1
             end
             
+            meanStandardsInRow = int32((1 - obj.pDeviant) / obj.pDeviant);
+            minStandardsInRow = meanStandardsInRow / 2;
+            maxStandardsInRow = meanStandardsInRow * 3 / 2;
+            nextDeviant = 1 + randi([minStandardsInRow maxStandardsInRow]);
+            
+            verificationArray = zeros(1, obj.numStimuli);
             for i = 1:obj.numStimuli
                 disp(i);
-                index = (rand < 0.8);
-                if index == 1
-                    obj.outlet.push_sample({'Standard'});
-                    presentStandard(obj);
-                else
+                if i == nextDeviant
                     obj.outlet.push_sample({'Deviant'});
                     presentDeviant(obj);
+                    verificationArray(i) = 1;
+                    
+                    nextDeviant = i + 1 + randi([minStandardsInRow maxStandardsInRow]);
+                else
+                    obj.outlet.push_sample({'Standard'});
+                    presentStandard(obj);
                 end
                 pause(obj.tDur);
                 
                 presentBreak(obj);
                 pause(obj.tISI);
             end
+            
+            disp(sum(verificationArray) / length(verificationArray));
         end
         
         function presentPreExperiment(obj)
