@@ -3,8 +3,8 @@ H = 768;
 W = 1366;
 
 % manually find some parameters to fit to screen
-h = int32(H * 0.75);
-w = int32(W * 0.8);
+h = int32(H * 0.7);
+w = int32(W * 0.7);
 interval = 1; %sec
 circle_diameter = h * 0.5 * 0.75;
 square_halfedge = h * 0.5 * 0.75;
@@ -38,6 +38,7 @@ shapes(:, :, 3) = zeros(h, w);
 tags = {'deviant'; 'standard'};
 
 figure(1)
+imshow(shapes(:, :, end));
 
 while waitforbuttonpress ~= 1
 end
