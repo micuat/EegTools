@@ -15,9 +15,8 @@ if __name__ == "__main__":
 
     channel_names = ['AF3', 'F7', 'F3', 'FC5', 'T7', 'P7', 'O1', 'O2', 'P8', 'T8', 'FC6', 'F4', 'F8', 'AF4']
 
-    # we pretend that our samples are actually
-    # 125ms old, e.g., as if coming from some external hardware
-    latency = 0.125
+    # we pretend that our samples have no latency
+    latency = 0
 
     # LSL Init
     info = StreamInfo('Emotiv', 'EEG', len(channel_names) * 2 + 2, 128, 'float32', 'myuid34234')
