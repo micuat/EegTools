@@ -13,7 +13,11 @@ if __name__ == "__main__":
     gevent.spawn(headset.setup)
     gevent.sleep(0)
 
-    channel_names = ['AF3', 'F7', 'F3', 'FC5', 'T7', 'P7', 'O1', 'O2', 'P8', 'T8', 'FC6', 'F4', 'F8', 'AF4']
+    # original Emotiv
+    # channel_names = ['AF3', 'F7', 'F3', 'FC5', 'T7', 'P7', 'O1', 'O2', 'P8', 'T8', 'FC6', 'F4', 'F8', 'AF4']
+
+    # easycap mod
+    channel_names = ['F8', 'F4', 'Cz', 'C3', 'Fz', 'F3', 'F7', 'C4', 'P7', 'P3', 'P8', 'Oz', 'Pz', 'P4']
 
     # we pretend that our samples have no latency
     latency = 0
